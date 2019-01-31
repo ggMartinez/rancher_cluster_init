@@ -16,15 +16,7 @@
 SERVER_NAME=$1
 CLUSTER_NAME=$2
 ADMIN_PASSWORD=$3
-STATUS_FILE='/opt/clusterStatus'
 
-# Check if Cluster is already initialized
-# -----------------------
-if [[ -e $STATUS_FILE ]] && [[ $(cat $STATUS_FILE) = "1" ]]
-then
-      echo "Cluster already initialized"
-      exit 0
-fi
 
 # Check if server is alive
 # -----------------------
@@ -98,5 +90,3 @@ echo "To add Worker nodes run '${AGENTCOMMAND} ${ROLEFLAGS}'"
 # ---------------
 echo "Process completed."
 
-# Ensure that the Cluster is initialized
-echo "1" > $STATUS_FILE
