@@ -62,6 +62,8 @@ CLUSTERID=`echo $CLUSTERRESPONSE | jq -r .id`
 # Get nodeCommand to add Master nodes
 # -------------------------------------
 
+# TODO: Try to quit the sed, and get the right server name
+
 # Specify role flags to use
 ROLEFLAGS="--etcd --controlplane --worker"
 
@@ -69,7 +71,7 @@ ROLEFLAGS="--etcd --controlplane --worker"
 AGENTCOMMAND=`curl -s 'https://127.0.0.1/v3/clusterregistrationtoken' -H 'content-type: application/json' -H "Authorization: Bearer $APITOKEN" --data-binary '{"type":"clusterRegistrationToken","clusterId":"'$CLUSTERID'"}' --insecure | jq -r .nodeCommand`
 
 # Show the command
-echo "To add Master nodes run '${AGENTCOMMAND} ${ROLEFLAGS}'"
+echo "To add Master nodes run '${AGENTCOMMAND} ${ROLEFLAGS}'" sed  "s|--server|--server $RANCHER_SERVER|g"
 
 
 
@@ -83,10 +85,9 @@ ROLEFLAGS="--worker"
 AGENTCOMMAND=`curl -s 'https://127.0.0.1/v3/clusterregistrationtoken' -H 'content-type: application/json' -H "Authorization: Bearer $APITOKEN" --data-binary '{"type":"clusterRegistrationToken","clusterId":"'$CLUSTERID'"}' --insecure | jq -r .nodeCommand`
 
 # Show the command
-echo "To add Worker nodes run '${AGENTCOMMAND} ${ROLEFLAGS}'"
+echo "To add Worker nodes run '${AGENTCOMMAND} ${ROLEFLAGS}'" | sed  "s|--server|--server $RANCHER_SERVER|g"
 
 
 # Finish Message
 # ---------------
 echo "Process completed."
-
